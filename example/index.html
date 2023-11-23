@@ -16,7 +16,7 @@
   <body style="margin:1em">
     <div id="remote-video-container">
       <video id="remote-video" playsinline autoplay style="width:100%;background-color:lightgray;"></video>
-      <audio id="remote-audio" playsinline autoplay style="display: none"></audio>
+      <audio id="remote-audio" playsinline autoplay style="display:none"></audio>
     </div>
     <div class="container">
       <div class="row">
@@ -33,6 +33,21 @@
             </div>
             <div>
               <input type="text" class="form-control" id="token" />
+            </div>
+          </div>
+
+          <div id="drm-area">
+            <div>
+              <b>Key Id</b>
+            </div>
+            <div>
+              <input type="text" class="form-control" id="keyid" />
+            </div>
+            <div>
+              <b>IV</b>
+            </div>
+            <div>
+              <input type="text" class="form-control" id="iv" />
             </div>
           </div>
 
