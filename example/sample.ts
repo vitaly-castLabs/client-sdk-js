@@ -1,45 +1,24 @@
 //@ts-ignore
 import {
   ConnectionQuality,
-  ConnectionState,
-  DataPacket_Kind,
   DisconnectReason,
-  ExternalE2EEKeyProvider,
   LocalAudioTrack,
-  LocalParticipant,
   LogLevel,
-  MediaDeviceFailure,
   Participant,
   ParticipantEvent,
   RemoteParticipant,
-  RemoteTrackPublication,
-  RemoteVideoTrack,
   Room,
   RoomConnectOptions,
   RoomEvent,
   RoomOptions,
-  Track,
   TrackPublication,
-  VideoCaptureOptions,
-  VideoCodec,
   VideoPresets,
-  VideoQuality,
   createAudioAnalyser,
-  setLogLevel,
-  supportsAV1,
-  supportsVP9,
+  setLogLevel
 } from '../src/index';
-import type { SimulationScenario } from '../src/room/types';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
-const state = {
-  isFrontFacing: false,
-  encoder: new TextEncoder(),
-  decoder: new TextDecoder(),
-  defaultDevices: new Map<MediaDeviceKind, string>(),
-  e2eeKeyProvider: new ExternalE2EEKeyProvider(),
-};
 let currentRoom: Room | undefined;
 
 let startTime: number;
@@ -115,7 +94,6 @@ const appActions = {
     room
       .on(RoomEvent.ParticipantConnected, participantConnected)
       .on(RoomEvent.ParticipantDisconnected, participantDisconnected)
-      .on(RoomEvent.DataReceived, handleData)
       .on(RoomEvent.Disconnected, handleRoomDisconnect)
       .on(RoomEvent.Reconnecting, () => appendLog('Reconnecting to room'))
       .on(RoomEvent.Reconnected, async () => {
@@ -203,16 +181,6 @@ declare global {
 window.appActions = appActions;
 
 // --------------------------- event handlers ------------------------------- //
-
-function handleData(msg: Uint8Array, participant?: RemoteParticipant) {
-  const str = state.decoder.decode(msg);
-  const chat = <HTMLTextAreaElement>$('chat');
-  let from = 'server';
-  if (participant) {
-    from = participant.identity;
-  }
-  chat.value += `${from}: ${str}\n`;
-}
 
 function participantConnected(participant: Participant) {
   appendLog('participant', participant.identity, 'connected', participant.metadata);
